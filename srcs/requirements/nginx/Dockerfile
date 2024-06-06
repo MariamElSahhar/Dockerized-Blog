@@ -4,11 +4,11 @@ RUN apk update && apk add --no-cache nginx openssl
 
 RUN mkdir /etc/nginx/ssl
 
+RUN openssl req -x509 -newkey rsa:2048 -sha256 -days 365 -nodes \
+    -keyout /etc/nginx/ssl/cert.key -out /etc/nginx/ssl/cert.crt \
+    -subj "CN=melsahha.42.fr"
 
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -subj "/CN=melsahha.42.fr"
-
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./index.html /usr/share/nginx/html/index.html
+COPY ./nginx.conf /etc/nginx/http.d
 
 EXPOSE 443
 
