@@ -10,3 +10,5 @@ down:
 	docker-compose down
 
 run: build up
+
+re: down run

@@ -1,11 +1,16 @@
-FROM alpine:3.19
+FROM alpine:3.18
 
-RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils
 
-COPY ./db.conf /etc/my.cnf
+RUN apk update
+RUN apk add --no-cache mariadb
 
-RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
+COPY db.conf /etc/mysql/
+RUN mv /etc/mysql/db.conf
+
+COPY ./db-setup.sh /var/lib/mysql/
+WORKDIR /var/lib/mysql
+RUN chmod +x db-setup.sh
 
 EXPOSE 3306
 
-CMD ["mysqld"]
+CMD ["./db-setup.sh"]
