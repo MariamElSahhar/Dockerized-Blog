@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status
+# until mysqladmin ping -h mariadb --silent; do
+#     echo "Waiting for MariaDB to start..."
+#     sleep 5
+# done
+sleep 10
 set -e
 
 # Create necessary directories
@@ -21,12 +25,14 @@ mv wp-cli.phar /usr/local/bin/wp
 wp core download --allow-root
 wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --dbhost=$DB_HOST --dbprefix=$DB_PREFIX --skip-check --allow-root
 
+# Install WordPress (optional)
+wp core install --url=$DOMAIN_NAME --title=$SITE_TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --skip-email --allow-root
 
 # Update PHP-FPM configuration to listen on port 9000
-sed -i 's|listen = .*|listen = 9000|' /etc/php82/php-fpm.d/www.conf
+sed -i 's|listen = .*|listen = 9000|' /etc/php/php-fpm.d/www.conf
 
 # Create the run directory for PHP-FPM
 mkdir -p /run/php
 
 # Start PHP-FPM
-php-fpm82 -F
+php-fpm -F

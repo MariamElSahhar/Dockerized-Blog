@@ -1,9 +1,9 @@
-FROM alpine:3.19
+FROM alpine:3.18
 
-RUN apk add --no-cache  php82 \
-                        php82-phar \
-                        php82-fpm \
-                        php82-mysqli \
+RUN apk add --no-cache  php \
+                        php-phar \
+                        php-fpm \
+                        php-mysqli \
                         curl \
                         bash
 
