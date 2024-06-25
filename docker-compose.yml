@@ -23,6 +23,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_PREFIX: ${DB_PREFIX}
       DOMAIN_NAME: ${DOMAIN_NAME}
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - wp_data:/var/www/html
     networks:
@@ -38,9 +39,9 @@ services:
       - ./.env
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     volumes:
       - db_data:/var/lib/mysql
     networks:

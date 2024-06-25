@@ -4,8 +4,15 @@
 #     echo "Waiting for MariaDB to start..."
 #     sleep 5
 # done
-sleep 10
+until nc -z -w5 mariadb 3306; do
+	echo "Waiting for MariaDB to start..."
+	sleep 5
+done
+echo "MariaDB ponged"
+
 set -e
+
+echo "SETTING UP WP"
 
 # Create necessary directories
 mkdir -p /var/www/html
@@ -23,16 +30,20 @@ mv wp-cli.phar /usr/local/bin/wp
 
 # Download WordPress core files
 wp core download --allow-root
-wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --dbhost=$DB_HOST --dbprefix=$DB_PREFIX --skip-check --allow-root
+wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --dbhost=$DB_HOST --skip-check --allow-root
 
 # Install WordPress (optional)
-wp core install --url=$DOMAIN_NAME --title=$SITE_TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --skip-email --allow-root
+wp core install --url=$DOMAIN_NAME --title="Inception" --admin_user="mariam" --admin_password=$DB_ROOT_PASSWORD --admin_email="mariam@email.com" --skip-email --allow-root
 
 # Update PHP-FPM configuration to listen on port 9000
-sed -i 's|listen = .*|listen = 9000|' /etc/php/php-fpm.d/www.conf
+sed -i 's|listen = .*|listen = 9000|' /etc/php81/php-fpm.d/www.conf
+echo "Updated php port"
 
 # Create the run directory for PHP-FPM
 mkdir -p /run/php
 
 # Start PHP-FPM
-php-fpm -F
+echo "Running php-fpm"
+php-fpm81 -F
+echo "Done"
+sleep 10

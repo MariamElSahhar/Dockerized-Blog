@@ -1,6 +1,6 @@
 FROM alpine:3.18
 
-RUN apk add --no-cache mariadb mariadb-client && mysql_install_db --verbose --user=mysql --datadir=/var/lib/mysql
+RUN apk add --no-cache mariadb mariadb-client 
 
 COPY db.conf /etc/my.cnf
 COPY ./db-setup.sh ./db-setup.sh
