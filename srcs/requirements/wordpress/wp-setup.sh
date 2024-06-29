@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# until mysqladmin ping -h mariadb --silent; do
-#     echo "Waiting for MariaDB to start..."
-#     sleep 5
-# done
 until nc -z -w5 mariadb 3306; do
 	echo "Waiting for MariaDB to start..."
 	sleep 5
@@ -14,13 +10,8 @@ set -e
 
 echo "SETTING UP WP"
 
-# Create necessary directories
 mkdir -p /var/www/html
-
-# Navigate to the target directory
 cd /var/www/html
-
-# Clean any existing content
 rm -rf *
 
 # Download and set up WP-CLI
@@ -35,15 +26,23 @@ wp config create --dbname=$DB_NAME --dbuser=$DB_USER --dbpass=$DB_PASSWORD --dbh
 # Install WordPress (optional)
 wp core install --url=$DOMAIN_NAME --title="Inception" --admin_user="mariam" --admin_password=$DB_ROOT_PASSWORD --admin_email="mariam@email.com" --skip-email --allow-root
 
+chmod -R 777 /var/www/html/
+
+if ! wp user get mariam --allow-root; then
+    wp user create mariam mariam@email.com --role=administrator --user_pass=$DB_ROOT_PASSWORD --allow-root
+fi
+
 # Update PHP-FPM configuration to listen on port 9000
 sed -i 's|listen = .*|listen = 9000|' /etc/php81/php-fpm.d/www.conf
 echo "Updated php port"
 
 # Create the run directory for PHP-FPM
 mkdir -p /run/php
+chmod -R 777 /var/www/html/
 
 # Start PHP-FPM
 echo "Running php-fpm"
 php-fpm81 -F
 echo "Done"
 sleep 10
+

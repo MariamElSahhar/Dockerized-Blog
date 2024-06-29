@@ -3,6 +3,7 @@ FROM alpine:3.18
 RUN apk add --no-cache  php \
                         php-phar \
                         php-fpm \
+                        php-iconv \
                         php-mysqli \
                         curl \
                         bash
