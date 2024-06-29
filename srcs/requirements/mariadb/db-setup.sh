@@ -1,9 +1,14 @@
 #!/bin/sh
 
+chmod 644 /etc/my.cnf
 chown -R mysql:mysql /var/lib/mysql
 sed -i "s|skip-networking|skip-networking=0|g" /etc/my.cnf.d/mariadb-server.cnf
 
 echo "MariaDB started"
+
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
+fi
 
 mysqld --user=mysql --bootstrap <<EOF
 FLUSH PRIVILEGES;
@@ -14,3 +19,5 @@ FLUSH PRIVILEGES;
 EOF
 
 mysqld --user=mysql
+
+sleep infinity

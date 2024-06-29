@@ -1,4 +1,4 @@
-.PHONY: build up down
+.PHONY: build up down re run logs prune
 
 build:
 	docker-compose build
@@ -16,3 +16,6 @@ re: down run
 prune: down
 	docker system prune --all --force --volumes
 	sudo rm -rf /home/${USER}/data
+
+logs:
+	docker-compose logs
