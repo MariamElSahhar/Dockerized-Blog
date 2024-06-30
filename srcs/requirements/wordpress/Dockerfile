@@ -8,7 +8,7 @@ RUN apk add --no-cache  php \
                         curl \
                         bash
 
-COPY ./wp-setup.sh ./wp-setup.sh
+COPY ./tools/wp-setup.sh ./wp-setup.sh
 RUN chmod +x ./wp-setup.sh
 
 EXPOSE 9000

@@ -1,13 +1,13 @@
-.PHONY: build up down re run logs prune
+DOCKER = docker-compose -f srcs/docker-compose.yml
 
 build:
-	docker-compose build
+	${DOCKER} build
 
 up:
-	docker-compose up -d
+	${DOCKER} up -d
 
 down:
-	docker-compose down
+	${DOCKER} down
 
 run: build up
 
@@ -18,7 +18,9 @@ prune: down
 	sudo rm -rf /home/${USER}/data
 
 logs:
-	docker-compose logs -f
+	${DOCKER} logs -f
 
 eval:
 	docker stop $(docker ps -qa); docker rm $(docker ps -qa); docker rmi $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null
+
+.PHONY: build up down re run logs prune

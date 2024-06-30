@@ -2,7 +2,7 @@ FROM alpine:3.18
 
 RUN apk add --no-cache mariadb mariadb-client
 
-COPY my.cnf /etc/my.cnf
+COPY ./tools/my.cnf /etc/my.cnf
 COPY ./db-setup.sh ./db-setup.sh
 RUN chmod +x ./db-setup.sh
 
