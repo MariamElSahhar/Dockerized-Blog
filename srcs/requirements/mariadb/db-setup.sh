@@ -19,5 +19,3 @@ FLUSH PRIVILEGES;
 EOF
 
 mysqld --user=mysql
-
-sleep infinity
