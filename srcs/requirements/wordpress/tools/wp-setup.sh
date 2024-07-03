@@ -29,7 +29,6 @@ if ! wp user get $WP_USER --field=ID --allow-root >/dev/null 2>&1; then
     wp user create $WP_USER $WP_USER_EMAIL --user_pass=$WP_USER_PASSWORD --allow-root
 fi
 
-sleep infinity
 sed -i 's|listen = .*|listen = 9000|' /etc/php82/php-fpm.d/www.conf
 echo "Updated php port"
 
