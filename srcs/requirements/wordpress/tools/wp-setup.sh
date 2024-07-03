@@ -37,5 +37,5 @@ mkdir -p /run/php
 chmod -R 777 /var/www/html/
 
 echo "Running php-fpm"
-php-fpm81 -F
+php-fpm82 -F
 echo "Done"
